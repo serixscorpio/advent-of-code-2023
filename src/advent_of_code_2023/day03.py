@@ -1,7 +1,7 @@
 def coordinates_adj_to_symbol(row: int, col: int, schematic: list[str]) -> frozenset:
-    min_row, max_row = 0, len(schematic)-1
-    min_col, max_col = 0, len(schematic[0])-1
-    return set([
+    min_row, max_row = 0, len(schematic) - 1
+    min_col, max_col = 0, len(schematic[0]) - 1
+    return {
         (max(min_row, row - 1), max(min_col, col - 1)),
         (max(min_row, row - 1), col),
         (max(min_row, row - 1), min(max_col, col + 1)),
@@ -10,24 +10,25 @@ def coordinates_adj_to_symbol(row: int, col: int, schematic: list[str]) -> froze
         (min(max_row, row + 1), max(min_col, col - 1)),
         (min(max_row, row + 1), col),
         (min(max_row, row + 1), min(max_col, col + 1)),
-    ]) - set([(row, col)])
-    
+    } - {(row, col)}
+
+
 def get_part_numbers(schematic: list[str]) -> list[int]:
     # build adjacent coordinates
     adjacent_coordinates = set()
     for row in range(len(schematic)):
         for col in range(len(schematic[0])):
-            if schematic[row][col] not in '0123456789.':
+            if schematic[row][col] not in "0123456789.":
                 # found a symbol
                 adjacent_coordinates |= coordinates_adj_to_symbol(row, col, schematic)
-    
+
     part_numbers = []
     for row in range(len(schematic)):
         tracking_digits = []
-        tracking_coordinates = set() 
+        tracking_coordinates = set()
         col = 0
         while col < len(schematic[0]):
-            if schematic[row][col] in '0123456789':
+            if schematic[row][col] in "0123456789":
                 tracking_digits.append(schematic[row][col])
                 tracking_coordinates.add((row, col))
             elif not tracking_digits:
@@ -50,9 +51,10 @@ def get_part_numbers(schematic: list[str]) -> list[int]:
 
 
 def make_schematic(file_name: str) -> list[str]:
-    with open(file_name, 'r') as file:
+    with open(file_name) as file:
         return file.read().splitlines()
+
 
 if __name__ == "__main__":
     # part 1
-    print(sum(get_part_numbers(make_schematic("tests/day3.input"))))
+    print(sum(get_part_numbers(make_schematic("tests/day03.input"))))  # noqa: T201
