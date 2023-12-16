@@ -34,7 +34,6 @@ def focusing_power(boxes: list[OrderedDict[str, int]]) -> int:
     return sum(
         (box_number + 1) * slot * focal_length
         for box_number in range(len(boxes))
-        #        if box := boxes[box_number]: # box is not empty
         for slot, focal_length in enumerate(boxes[box_number].values(), start=1)
     )
 
